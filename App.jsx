@@ -1,14 +1,14 @@
-import { useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import sampleCsv from "../data/sample_sensor_data.csv?raw";
 
 const featureLabels = {
-  motor_temp_c: "motor temp",
-  vibration_g: "vibration",
-  current_a: "current draw",
-  battery_voltage_v: "battery voltage",
-  wheel_speed_rpm: "wheel speed",
-  torque_nm: "torque",
-  operating_hours: "operating hours",
+  motor_temp_c: "Motor Temperature",
+  vibration_g: "Vibration",
+  current_a: "Current Draw",
+  battery_voltage_v: "Battery Voltage",
+  wheel_speed_rpm: "Wheel Speed",
+  torque_nm: "Torque",
+  operating_hours: "Operating Hours",
 };
 
 const featureImportance = [
@@ -34,10 +34,10 @@ const initialReading = {
 // converts the bundled csv text into row objects for the dashboard.
 function parseCsv(csvText) {
   const [headerLine, ...lines] = csvText.trim().split("\n");
-  const headers = headerLine.split(",");
+  const headers = headerLine.split(",").map((header) => header.trim());
 
   return lines.map((line) => {
-    const values = line.split(",");
+    const values = line.split(",").map((value) => value.trim());
     return headers.reduce((row, header, index) => {
       row[header] = Number(values[index]);
       return row;
@@ -157,8 +157,8 @@ function PredictionPanel({ reading }) {
       <strong className="risk-score">{percent(probability)}</strong>
       <p className="muted">
         {isRisky
-          ? "inspect the drivetrain, cooling, wiring, and recent driving logs before another hard run."
-          : "the robot looks healthy for now, but the dashboard should still be used as a monitoring aid."}
+          ? "Inspect the drivetrain, cooling, wiring, and recent driving logs before another hard run."
+          : "The robot looks healthy for now, but the dashboard should still be used as a monitoring tool."}
       </p>
     </section>
   );
@@ -179,15 +179,15 @@ export default function App() {
     <main>
       <section className="hero">
         <div>
-          <p className="eyebrow">robot telemetry demo</p>
-          <h1>Robot Predictive Maintenance</h1>
+          <p className="eyebrow">Hardware Monitoring Demo</p>
+          <h1>Robot Hardware Monitoring</h1>
           <p>
-            a fast Vercel dashboard that turns simulated drivetrain sensor values into a
+            A fast Vercel dashboard that turns simulated drivetrain sensor values into a
             failure-risk prediction.
           </p>
         </div>
         <div className="hero-stat">
-          <span>sample rows</span>
+          <span>Sample Rows</span>
           <strong>{rows.length}</strong>
         </div>
       </section>
@@ -201,14 +201,14 @@ export default function App() {
 
       <section className="dashboard-grid">
         <section className="panel">
-          <p className="section-kicker">model signals</p>
+          <p className="section-kicker">Model Signals</p>
           <h2>most important inputs</h2>
           <FeatureBars />
         </section>
 
         <section className="panel">
-          <p className="section-kicker">confusion matrix</p>
-          <h2>sample dataset check</h2>
+          <p className="section-kicker">Information Grid</p>
+          <h2>Sample Dataset Check</h2>
           <div className="confusion-grid">
             <MetricCard label="true normal" value={stats.confusion.trueNegative} />
             <MetricCard label="false risk" value={stats.confusion.falsePositive} />
@@ -220,23 +220,23 @@ export default function App() {
 
       <section className="control-grid">
         <section className="panel">
-          <p className="section-kicker">manual test</p>
-          <h2>adjust sensor values</h2>
-          <SensorSlider id="motor_temp_c" label="motor temp c" min={25} max={115} step={1} value={reading.motor_temp_c} onChange={updateReading} />
-          <SensorSlider id="vibration_g" label="vibration g" min={0.05} max={5} step={0.05} value={reading.vibration_g} onChange={updateReading} />
-          <SensorSlider id="current_a" label="current amps" min={2} max={55} step={1} value={reading.current_a} onChange={updateReading} />
-          <SensorSlider id="battery_voltage_v" label="battery volts" min={9} max={13.2} step={0.1} value={reading.battery_voltage_v} onChange={updateReading} />
-          <SensorSlider id="wheel_speed_rpm" label="wheel rpm" min={150} max={5200} step={50} value={reading.wheel_speed_rpm} onChange={updateReading} />
-          <SensorSlider id="torque_nm" label="torque nm" min={1} max={48} step={1} value={reading.torque_nm} onChange={updateReading} />
-          <SensorSlider id="operating_hours" label="operating hours" min={0} max={520} step={5} value={reading.operating_hours} onChange={updateReading} />
+          <p className="section-kicker">Manual Test</p>
+          <h2>Adjust Sensor Values</h2>
+          <SensorSlider id="motor_temp_c" label="Motor Temperature" min={25} max={115} step={1} value={reading.motor_temp_c} onChange={updateReading} />
+          <SensorSlider id="vibration_g" label="Vibration" min={0.05} max={5} step={0.05} value={reading.vibration_g} onChange={updateReading} />
+          <SensorSlider id="current_a" label="Current Draw" min={2} max={55} step={1} value={reading.current_a} onChange={updateReading} />
+          <SensorSlider id="battery_voltage_v" label="Battery Voltage" min={9} max={13.2} step={0.1} value={reading.battery_voltage_v} onChange={updateReading} />
+          <SensorSlider id="wheel_speed_rpm" label="Wheel Speed" min={150} max={5200} step={50} value={reading.wheel_speed_rpm} onChange={updateReading} />
+          <SensorSlider id="torque_nm" label="Torque" min={1} max={48} step={1} value={reading.torque_nm} onChange={updateReading} />
+          <SensorSlider id="operating_hours" label="Operating Hours" min={0} max={520} step={5} value={reading.operating_hours} onChange={updateReading} />
         </section>
 
         <PredictionPanel reading={reading} />
       </section>
 
       <section className="panel">
-        <p className="section-kicker">dataset preview</p>
-        <h2>first six generated samples</h2>
+          <p className="section-kicker">Dataset Preview</p>
+        <h2>First Six Generated Samples</h2>
         <div className="table-wrap">
           <table>
             <thead>
